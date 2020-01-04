@@ -5,6 +5,9 @@
 
 class Graph
 {
+	friend class Node;
+	friend class Edge;
+
 	Dynamic_Array<Node>* nodeArray;
 	Dynamic_Array<Edge>* edgeArray;
 

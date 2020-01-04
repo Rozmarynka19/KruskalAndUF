@@ -20,39 +20,62 @@ void Graph::Load(string filename)
 
 	if (plik.good())
 	{
-		while (!plik.eof())
+		string line;
+		int number, i1, i2;
+		double x, y;
+
+		plik >> line;
+		cout << line << endl;
+		number = atoi(line.c_str());
+
+		for (int i = 0; i < number; i++)
 		{
-			string line;
-
 			plik >> line;
-			cout << line << endl;
+			x = atof(line.c_str());
+			plik >> line;
+			y = atof(line.c_str());
+
+			cout << x << "\t" << y;
 			getchar();
+			nodeArray->addElement(*(new Node(x, y)));
+		}
+		//cout << nodeArray->currentSize << endl;
 
-			//getline(plik, ma);
-			//getline(plik, mo);
-			//getline(plik, linia);
-			//rok = atoi(linia.c_str()); //konwersja stringa na int
-			//getline(plik, linia);
-			//poj = stof(linia); //konwersja stringa na float
-			//getline(plik, linia);
-			//rez = linia.compare("1") ? true : false;//konwersja stringa na bool
-			//getline(plik, linia);
-			//c = stof(linia);//konwersja stringa na float
+		plik >> line;
+		cout << line << endl;
+		number = atoi(line.c_str());
 
-			//baza_motocykli.push_back(Motocykl(ma, mo, rok, poj, rez, c));
+		for (int i = 0; i < number; i++)
+		{
+			plik >> line;
+			i1 = atoi(line.c_str());
+			plik >> line;
+			i2 = atoi(line.c_str());
+			plik >> line;
+			x = atof(line.c_str());
+
+			cout << i1 << "\t" << i2 << "\t" << x;
+			getchar();
+			edgeArray->addElement(*(new Edge(i1, i2, x)));
+		}
+		//cout << edgeArray->currentSize << endl;
+		if (!plik.eof()) {
+			cout << "I got sth else to read..." << endl;
+			cout << line << endl;
 		}
 
-		cout << "\nGraf zostal wczytany." << endl;
+
+		cout << "\nGraph has been loaded." << endl;
 	}
 	else
 	{
 		try
 		{
-			throw logic_error("Plik nie zostal odczytany!");
+			throw logic_error("Reading file failed!");
 		}
 		catch (logic_error & error)
 		{
-			cout << "Logic error: " << error.what() << " Upewnij sie, ze podales dobra sciezke dostepu do pliku." << endl;
+			cout << "Logic error: " << error.what() << " Make sure that the file exists." << endl;
 			terminate();
 		}
 	}
