@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Node.h"
 
-Node::Node(float x, float y)
+Node::Node(double x, double y)
 {
 	this.x = x;
 	this.y = y;

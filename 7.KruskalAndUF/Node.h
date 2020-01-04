@@ -1,7 +1,7 @@
 #pragma once
 class Node {
-	float x;
-	float y;
+	double x;
+	double y;
 public:
-	Node(float x, float y);
+	Node(double x, double y);
 };
