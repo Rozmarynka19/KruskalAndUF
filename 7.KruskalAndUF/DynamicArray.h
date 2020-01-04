@@ -1,6 +1,6 @@
 #pragma once
-#include <iostream>
 #include <string>
+#include <iostream>
 using namespace std;
 
 template <class T>
@@ -76,7 +76,7 @@ public:
 		}
 		else
 		{
-			cout << "Retrieving failed - index out of range" << endl;
+			cout << "Retrieving failed - index out of range" << endl;;
 			return NULL;
 		}
 	}
@@ -131,7 +131,8 @@ public:
 
 };
 
-string elementToString(char c)
-{
-	return string(1, c);
-}
+//genererate LINKER error
+//string elementToString(char c)
+//{
+//	return string(1, c);
+//}
