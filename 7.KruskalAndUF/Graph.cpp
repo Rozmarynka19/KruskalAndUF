@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <direct.h> //_mkdir
+#include <sstream>
 #include "DynamicArray.h"
 #include "Edge.h"
 #include "Node.h"
@@ -25,7 +27,7 @@ void Graph::Load(string filename)
 		double x, y;
 
 		plik >> line;
-		cout << line << endl;
+		//cout << line << endl;
 		number = atoi(line.c_str());
 
 		for (int i = 0; i < number; i++)
@@ -35,14 +37,14 @@ void Graph::Load(string filename)
 			plik >> line;
 			y = atof(line.c_str());
 
-			cout << x << "\t" << y;
-			getchar();
+			//cout << x << "\t" << y;
+			//getchar();
 			nodeArray->addElement(*(new Node(x, y)));
 		}
 		//cout << nodeArray->currentSize << endl;
 
 		plik >> line;
-		cout << line << endl;
+		//cout << line << endl;
 		number = atoi(line.c_str());
 
 		for (int i = 0; i < number; i++)
@@ -54,8 +56,8 @@ void Graph::Load(string filename)
 			plik >> line;
 			x = atof(line.c_str());
 
-			cout << i1 << "\t" << i2 << "\t" << x;
-			getchar();
+			//cout << i1 << "\t" << i2 << "\t" << x;
+			//getchar();
 			edgeArray->addElement(*(new Edge(i1, i2, x)));
 		}
 		//cout << edgeArray->currentSize << endl;
@@ -64,8 +66,10 @@ void Graph::Load(string filename)
 			cout << line << endl;
 		}
 
-
 		cout << "\nGraph has been loaded." << endl;
+		//cout<<nodeArray->getData(7);
+		//nodeArray->operator[](5).x;
+		//(*nodeArray)[5].x;
 	}
 	else
 	{
@@ -79,4 +83,64 @@ void Graph::Load(string filename)
 			terminate();
 		}
 	}
+}
+
+void Graph::prepareFiles(fstream& nodeFile, fstream& edgeFile)
+{
+	for (int i = 0; i < nodeArray->currentSize; i++)
+	{
+		nodeFile << "		" << i << " [pos=\"" << (*nodeArray)[i].x * 10 << "," << (*nodeArray)[i].y * 10 << "!\"]" << std::endl;
+	}
+	for (int i = 0; i < edgeArray->currentSize; i++)
+	{
+		edgeFile << " " << (*edgeArray)[i].firstIndex << " -- " << (*edgeArray)[i].secondIndex
+			<<" [label=" << (*edgeArray)[i].cost
+			//<<" taillabel="<< (*edgeArray)[i].firstIndex
+			//<<" headlabel="<< (*edgeArray)[i].secondIndex
+			<<"]" << endl;
+	}
+}
+void Graph::DrawGraph()
+{
+	fstream nodes, edges, out;
+	string line = "", outName;
+	stringstream ss;
+
+	_mkdir("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph");
+	ss << "\"\"C:\\Program Files (x86)\\Graphviz2.38\\bin\\neato.exe\" -Tpdf \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot\" -o \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\graph.pdf\"";
+	outName = ss.str();
+	//cout << outName << endl;
+	nodes.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\nodes.txt",std::ios::out|std::ios::in|std::ios::trunc);
+	edges.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\edges.txt",std::ios::out|std::ios::in|std::ios::trunc);
+	out.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot",std::ios::out|std::ios::in|std::ios::trunc);
+
+	if (!nodes.good()) cerr << "Open nodes.txt failed!" << endl;
+	if (!edges.good()) cerr << "Open edges.txt failed!" << endl;
+	if (!out.good()) cerr << "Open out.dot failed!" << endl;
+
+	prepareFiles(nodes, edges);
+
+	out << "graph D {" << std::endl;
+	out << "	{" << std::endl;
+	out << "	 node [shape = circle, style=filled, width=0.2, fixedsize=true, fontsize=10]" << std::endl;
+	//out << "	 node [shape = point]" << std::endl;
+
+	nodes.seekg(0, std::ios::beg);
+	while (getline(nodes, line)) {
+		out << line << std::endl;
+	}
+	out << "	}" << std::endl;
+	edges.seekg(0, std::ios::beg);
+	while (getline(edges, line)) {
+		out << line << std::endl;
+	}
+	nodes.close();
+	edges.close();
+	//remove("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\nodes.txt");
+	//remove("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\edges.txt");
+	out << "}" << std::endl;
+	out.close();
+	system(outName.c_str());
+
+	//remove("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot");
 }

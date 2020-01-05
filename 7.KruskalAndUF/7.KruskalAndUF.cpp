@@ -12,6 +12,17 @@ int main()
 {
 	Graph *graph = new Graph();
 	graph->Load("g1.txt");
+	//Edge* edge = new Edge[2];
+	//edge[0].firstIndex = 2;
+	//edge[0].secondIndex = 4;
+	//edge[0].cost = 0.2;
+
+	//edge[1].firstIndex = 1;
+	//edge[1].secondIndex = 2;
+	//edge[1].cost = 0.5;
+
+	//cout << edge[0] <<endl<< edge[1] << endl;
+	graph->DrawGraph();
     cout << "Hello World!\n"; 
 }
 

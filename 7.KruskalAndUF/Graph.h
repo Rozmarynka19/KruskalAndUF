@@ -11,7 +11,9 @@ class Graph
 	Dynamic_Array<Node>* nodeArray;
 	Dynamic_Array<Edge>* edgeArray;
 
+	void prepareFiles(fstream& nodeFile, fstream& edgeFile);
 public:
 	Graph();	
 	void Load(string filename);
+	void DrawGraph();
 };
