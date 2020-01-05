@@ -13,7 +13,11 @@ Graph::Graph()
 	nodeArray = new Dynamic_Array<Node>();
 	edgeArray = new Dynamic_Array<Edge>();
 }
-
+Graph::~Graph()
+{
+	delete nodeArray;
+	delete edgeArray;
+}
 void Graph::Load(string filename)
 {
 	ifstream plik;

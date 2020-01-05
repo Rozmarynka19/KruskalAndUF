@@ -6,13 +6,12 @@ using namespace std;
 template <class T>
 class Dynamic_Array
 {
-	
+	T* array;
 	int maxSize;
 
 	const int AUGMENTATION_FACTOR = 2;
 
 public:
-	T* array;
 	int currentSize;
 	T& operator[](int index) { return array[index];}
 	Dynamic_Array()

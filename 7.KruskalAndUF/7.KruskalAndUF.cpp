@@ -5,8 +5,15 @@
 #include "Edge.h"
 #include "Node.h"
 #include "Graph.h"
+#include "UnionFind.h"
 #include <string>
 using namespace std;
+
+void Kruskal(Graph& graph)
+{
+	UnionFind* uf = new UnionFind(graph.nodeArray->currentSize);
+
+}
 
 int main()
 {
