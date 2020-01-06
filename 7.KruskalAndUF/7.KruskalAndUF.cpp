@@ -2,35 +2,84 @@
 //
 
 #include <iostream>
+#include <time.h>
 #include "Edge.h"
 #include "Node.h"
 #include "Graph.h"
 #include "UnionFind.h"
+#include "HeapSort.h"
+#include "DynamicArray.h"
 #include <string>
 using namespace std;
 
-void Kruskal(Graph& graph)
-{
-	UnionFind* uf = new UnionFind(graph.nodeArray->currentSize);
+clock_t KruskalStart, KruskalStop, SortStart, SortStop;
 
+int Kruskal(Graph* graph, Graph* finalGraph)
+{
+	UnionFind* uf = new UnionFind(graph->nodeArray->currentSize);
+	BinaryHeap<Edge>* binaryHeap = new BinaryHeap<Edge>(graph->edgeArray, false, false);
+
+	SortStart = clock();
+	binaryHeap->HeapSort();
+	SortStop = clock();
+
+	int i = 0, firstParent, secondParent;
+	KruskalStart = clock();
+	while (uf->unionCounter < graph->nodeArray->currentSize-1)
+	{
+		Edge currentEdge = graph->edgeArray->getData(i);
+
+		//Find without compression
+		//firstParent = uf->Find(currentEdge.firstIndex);
+		//secondParent = uf->Find(currentEdge.secondIndex);
+
+		//Find with compression
+		firstParent = uf->FindWithCompression(currentEdge.firstIndex);
+		secondParent = uf->FindWithCompression(currentEdge.secondIndex);
+
+		if (firstParent != secondParent)
+		{
+			finalGraph->edgeArray->addElement(currentEdge);
+			
+			//Casual union
+			//uf->Union(firstParent, secondParent);
+
+			//Union by rank
+			uf->UnionByRank(firstParent, secondParent);
+			
+		}
+
+		i++;
+	}
+	KruskalStop = clock();
+	int findCounter = uf->findCounter;
+
+	delete uf, binaryHeap;
+
+	return findCounter;
 }
 
 int main()
 {
+	int findCounter;
 	Graph *graph = new Graph();
-	graph->Load("g1.txt");
-	//Edge* edge = new Edge[2];
-	//edge[0].firstIndex = 2;
-	//edge[0].secondIndex = 4;
-	//edge[0].cost = 0.2;
 
-	//edge[1].firstIndex = 1;
-	//edge[1].secondIndex = 2;
-	//edge[1].cost = 0.5;
+	cout << "Loading graph." << endl;
+	graph->Load("g2.txt");
 
-	//cout << edge[0] <<endl<< edge[1] << endl;
+	Graph* finalGraph = new Graph(graph);
+
+	cout << "Kruskal starts" << endl;
+	findCounter = Kruskal(graph, finalGraph);
+
+	cout << "Drawing input graph." << endl;
 	graph->DrawGraph();
+
+	cout << "Drawing output graph." << endl;
+	finalGraph->DrawGraph();
+
     cout << "Hello World!\n"; 
+	delete graph, finalGraph;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

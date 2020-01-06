@@ -1,4 +1,5 @@
 #include <iostream>
+//#include <iomanip>
 #include <string>
 #include <fstream>
 #include <direct.h> //_mkdir
@@ -7,16 +8,30 @@
 #include "Edge.h"
 #include "Node.h"
 #include "Graph.h"
+using namespace std;
 
+int Graph::graphNumber=0;
 Graph::Graph()
 {
 	nodeArray = new Dynamic_Array<Node>();
+	edgeArray = new Dynamic_Array<Edge>();
+}
+Graph::Graph(const Graph* graph)
+{
+	nodeArray = graph->nodeArray;
 	edgeArray = new Dynamic_Array<Edge>();
 }
 Graph::~Graph()
 {
 	delete nodeArray;
 	delete edgeArray;
+}
+double Graph::CountSumOfCost()
+{
+	double result = 0;
+	for (int i = 0; i < edgeArray->currentSize; i++)
+		result += (*edgeArray)[i].cost;
+	return result;
 }
 void Graph::Load(string filename)
 {
@@ -91,17 +106,22 @@ void Graph::Load(string filename)
 
 void Graph::prepareFiles(fstream& nodeFile, fstream& edgeFile)
 {
+	/*ofstream file;
+	file.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\plik.txt", std::ios::out);
+	if (!file.good()) cerr << "file corrupted" << endl;*/
 	for (int i = 0; i < nodeArray->currentSize; i++)
 	{
 		nodeFile << "		" << i << " [pos=\"" << (*nodeArray)[i].x * 10 << "," << (*nodeArray)[i].y * 10 << "!\"]" << std::endl;
 	}
 	for (int i = 0; i < edgeArray->currentSize; i++)
 	{
+		/*file << " " << (*edgeArray)[i].firstIndex << " -- " << (*edgeArray)[i].secondIndex
+			<< " [label=" <<fixed<< (*edgeArray)[i].cost << "]" << endl;*/
 		edgeFile << " " << (*edgeArray)[i].firstIndex << " -- " << (*edgeArray)[i].secondIndex
-			<<" [label=" << (*edgeArray)[i].cost
+			<<" [label=\"" << (*edgeArray)[i].cost
 			//<<" taillabel="<< (*edgeArray)[i].firstIndex
 			//<<" headlabel="<< (*edgeArray)[i].secondIndex
-			<<"]" << endl;
+			<<"\"]" << endl;
 	}
 }
 void Graph::DrawGraph()
@@ -111,7 +131,8 @@ void Graph::DrawGraph()
 	stringstream ss;
 
 	_mkdir("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph");
-	ss << "\"\"C:\\Program Files (x86)\\Graphviz2.38\\bin\\neato.exe\" -Tpdf \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot\" -o \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\graph.pdf\"";
+	ss << "\"\"C:\\Program Files (x86)\\Graphviz2.38\\bin\\neato.exe\" -Tpdf \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot\" -o \"C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\graph"<<graphNumber<<".pdf\"";
+	//"C:\\Program Files (x86)\\Graphviz2.38\\bin\\neato.exe" -Tpdf "C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot" -o "C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\graph.pdf"
 	outName = ss.str();
 	//cout << outName << endl;
 	nodes.open("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\nodes.txt",std::ios::out|std::ios::in|std::ios::trunc);
@@ -126,6 +147,7 @@ void Graph::DrawGraph()
 
 	out << "graph D {" << std::endl;
 	out << "	{" << std::endl;
+	//out << "	 node [shape = circle, style=filled, fontsize=10]" << std::endl;
 	out << "	 node [shape = circle, style=filled, width=0.2, fixedsize=true, fontsize=10]" << std::endl;
 	//out << "	 node [shape = point]" << std::endl;
 
@@ -145,6 +167,7 @@ void Graph::DrawGraph()
 	out << "}" << std::endl;
 	out.close();
 	system(outName.c_str());
+	graphNumber++;
 
 	//remove("C:\\Users\\Lara\\Desktop\\Algorytmy2\\Laboratoria\\7.KruskalAndUF\\graph\\out.dot");
 }

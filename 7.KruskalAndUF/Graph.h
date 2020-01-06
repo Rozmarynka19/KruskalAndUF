@@ -7,15 +7,18 @@ class Graph
 {
 	friend class Node;
 	friend class Edge;
-	friend void Kruskal(Graph& graph);
+	friend int Kruskal(Graph* graph, Graph* finalGraph);
 
+	static int graphNumber;
 	Dynamic_Array<Node>* nodeArray;
 	Dynamic_Array<Edge>* edgeArray;
 
 	void prepareFiles(fstream& nodeFile, fstream& edgeFile);
 public:
 	Graph();	
+	Graph(const Graph* graph);
 	~Graph();	
+	double CountSumOfCost();
 	void Load(string filename);
 	void DrawGraph();
 };

@@ -161,6 +161,7 @@
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="Edge.h" />
     <ClInclude Include="Graph.h" />
+    <ClInclude Include="HeapSort.h" />
     <ClInclude Include="Node.h" />
     <ClInclude Include="UnionFind.h" />
   </ItemGroup>
