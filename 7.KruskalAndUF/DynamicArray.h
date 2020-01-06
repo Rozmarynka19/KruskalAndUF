@@ -80,7 +80,7 @@ public:
 		}
 		else
 		{
-			cerr << "Retrieving failed - index out of range" << endl;
+			//cerr << "Retrieving failed - index out of range" << endl;
 			//return NULL;
 		}
 	}

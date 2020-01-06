@@ -8,6 +8,7 @@ class Graph
 	friend class Node;
 	friend class Edge;
 	friend int Kruskal(Graph* graph, Graph* finalGraph);
+	friend void DrawSummary(Graph* finalGraph, int& findCounter);
 
 	static int graphNumber;
 	Dynamic_Array<Node>* nodeArray;
